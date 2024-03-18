@@ -1,6 +1,6 @@
 import Gallery from "@/components/Gallery";
 import ProductInfo from "@/components/ProductInfo";
-import { getProductsDetails } from "@/lib/action";
+import { getProductsDetails } from "@/lib/actions/action";
 import React from "react";
 
 const ProductDetails = async ({

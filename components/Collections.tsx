@@ -1,4 +1,4 @@
-import { getCollection } from "@/lib/action";
+import { getCollection } from "@/lib/actions/action";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";

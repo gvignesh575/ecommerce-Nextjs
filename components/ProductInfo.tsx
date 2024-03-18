@@ -1,70 +1,93 @@
 "use client";
-import { useUser } from "@clerk/nextjs";
-import { Heart } from "lucide-react";
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import HeartFavourite from "./Heart";
+import { MinusCircle, PlusCircle } from "lucide-react";
 
 const ProductInfo = ({ productInfo }: { productInfo: ProductType }) => {
-  const { user } = useUser();
-  const [loading, setLoading] = useState(false);
+  const [selectedColor, setSelectedColor] = useState<string>(
+    productInfo.colors[0]
+  );
+  const [selectedSize, setSelectedSize] = useState<string>(
+    productInfo.sizes[0]
+  );
 
-  const [signedInUser, setSignedInUser] = useState<UserType | null>(null);
-
-  const [isLiked, setIsLiked] = useState(false);
-
-  const router = useRouter();
-
-  const getUser = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch("/api/users");
-      const data = await res.json();
-      setSignedInUser(data);
-      setIsLiked(data.wishlist.includes(productInfo._id));
-      setLoading(false);
-    } catch (err) {
-      console.log("[users_GET]", err);
-    }
-  };
-
-  useEffect(() => {
-    if (user) {
-      getUser();
-    }
-  }, [user]);
-
-  const handleLike = async () => {
-    try {
-      if (!user) {
-        router.push("/sign-in");
-        return;
-      } else {
-        setLoading(true);
-        const res = await fetch("/api/users/wishlist", {
-          method: "POST",
-          body: JSON.stringify({
-            productId: productInfo._id,
-          }),
-        });
-
-        const updatedUser = await res.json();
-        setSignedInUser(updatedUser);
-        setIsLiked(updatedUser.wishlist.includes(productInfo._id));
-      }
-    } catch (err) {
-      console.log("[wishlist_POST]", err);
-    }
-  };
+  const [quantity, setQuantity] = useState<number>(1);
 
   return (
     <div className="max-w-[400px] flex flex-col gap-4">
       <div className="flex justify-between items-center">
         <p className="text-heading3-bold">{productInfo.title}</p>
-        <button onClick={handleLike} type="button">
-          <Heart fill={isLiked ? `red` : "white"} />
-          {""}
-        </button>
+        <HeartFavourite product={productInfo} />
       </div>
+
+      <div className="flex gap-2">
+        <p className="text-base-medium text-grey-2">Category</p>
+        <p className="text-base-bold">{productInfo.category}</p>
+      </div>
+
+      <p className="text-heading3-bold">{productInfo.price}</p>
+
+      <div className="flex flex-col gap-2">
+        <p className="text-base-medium text-grey-2">Description</p>
+        <p className="text-small-medium">{productInfo.description}</p>
+      </div>
+
+      {productInfo.colors.length > 0 && (
+        <div className="flex flex-col gap-2">
+          <p className="text-base-medium text-grey-2">Colors:</p>
+          <div className="flex gap-2">
+            {productInfo.colors.map((color, index) => (
+              <p
+                key={index}
+                className={`border border-black px-2 py-1 rounded-lg cursor-pointer ${
+                  selectedColor === color && "bg-black text-white"
+                }`}
+                onClick={() => setSelectedColor(color)}
+              >
+                {color}
+              </p>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {productInfo.sizes.length > 0 && (
+        <div className="flex flex-col gap-2">
+          <p className="text-base-medium text-grey-2">Sizes:</p>
+          <div className="flex gap-2">
+            {productInfo.sizes.map((size, index) => (
+              <p
+                key={index}
+                className={`border border-black px-2 py-1 rounded-lg cursor-pointer
+                ${selectedSize === size && "bg-black text-white"}
+                `}
+                onClick={() => setSelectedSize(size)}
+              >
+                {size}
+              </p>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="flex flex-col gap-2">
+        <p className="text-base-medium text-grey-2">Quantity:</p>
+        <div className="flex gap-6 items-center">
+          <MinusCircle
+            className="hover:text-red-1 cursor-pointer"
+            onClick={() => quantity > 1 && setQuantity(quantity - 1)}
+          />
+          <p className="text-body-bold">{quantity}</p>
+          <PlusCircle
+            className="hover:text-red-1 cursor-pointer"
+            onClick={() => setQuantity(quantity + 1)}
+          />
+        </div>
+      </div>
+
+      <button className="outline text-base-bold py-3 rounded-lg hover:bg-black hover:text-white">
+        Add To Cart
+      </button>
     </div>
   );
 };

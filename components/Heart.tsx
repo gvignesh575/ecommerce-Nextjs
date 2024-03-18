@@ -33,7 +33,10 @@ const HeartFavourite = ({ product }: { product: ProductType }) => {
     }
   }, [user]);
 
-  const handleLike = async () => {
+  const handleLike = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
     try {
       if (!user) {
         router.push("/sign-in");
@@ -57,7 +60,8 @@ const HeartFavourite = ({ product }: { product: ProductType }) => {
   };
   return (
     <button onClick={handleLike}>
-      <Heart />
+      <Heart fill={isLiked ? `red` : "white"} />
+      {""}
     </button>
   );
 };
