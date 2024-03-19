@@ -62,7 +62,10 @@ const useCart = create(
         set({ cartItems: newCartItems });
         toast.success("Item quantity decreased");
       },
-      clearCart: () => set({ cartItems: [] }),
+      clearCart: () => {
+        set({ cartItems: [] });
+        toast.success("Cart cleared", { icon: "🛒" });
+      },
     }),
     {
       name: "cart-storage",
