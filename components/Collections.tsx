@@ -15,7 +15,10 @@ const Collections = async () => {
         <>
           <div className="flex items-center justify-center gap-8 ">
             {collections.map((collection: CollectionType) => (
-              <Link href={`/collection/${collection._id}`} key={collection._id}>
+              <Link
+                href={`/collections/${collection._id}`}
+                key={collection._id}
+              >
                 <Image
                   src={collection.image}
                   alt={collection.title}
