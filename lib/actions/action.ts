@@ -14,7 +14,9 @@ export const getCollectionDetails = async (collectionId: string) => {
 };
 
 export const getProducts = async () => {
-  const products = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`);
+  const products = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
+    cache: "no-store",
+  });
   return await products.json();
 };
 
@@ -34,7 +36,10 @@ export const getSearchedProducts = async (query: string) => {
 
 export const getOrders = async (customerId: string) => {
   const orders = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/orders/customers/${customerId}`
+    `${process.env.NEXT_PUBLIC_API_URL}/orders/customers/${customerId}`,
+    {
+      cache: "no-store",
+    }
   );
   return await orders.json();
 };
