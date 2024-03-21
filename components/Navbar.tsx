@@ -4,13 +4,15 @@ import { UserButton, useUser } from "@clerk/nextjs";
 import { CircleUserRound, Menu, Search, ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 const Navbar = () => {
   const { user } = useUser();
 
   const router = useRouter();
+
+  const pathname = usePathname();
 
   const [dropdownMenu, setDropdownMenu] = useState(false);
 
@@ -24,18 +26,27 @@ const Navbar = () => {
         <Image src="/logo.png" alt="logo" width={130} height={100} />
       </Link>
       <div className="flex gap-4 text-base-bold max-lg:hidden">
-        <Link href={"/"} className="hover:text-gray-600">
+        <Link
+          href={"/"}
+          className={`hover:text-gray-600 ${
+            pathname === "/" && "text-blue-500"
+          }`}
+        >
           Home
         </Link>
         <Link
           href={user ? "/wishlist" : "/sign-in"}
-          className="hover:text-gray-600"
+          className={`hover:text-gray-600 ${
+            pathname === "/wishlist" && "text-blue-500"
+          }`}
         >
           WishList
         </Link>
         <Link
           href={user ? "/orders" : "/sign-in"}
-          className="hover:text-gray-600"
+          className={`hover:text-gray-600 ${
+            pathname === "/orders" && "text-blue-500"
+          }`}
         >
           Orders
         </Link>
