@@ -8,7 +8,7 @@ const Collections = async () => {
 
   return (
     <div className="flex flex-col items-center gap-10 py-8 px-5">
-      <p className="text-heading1-bold">Collections</p>
+      <p className="text-[30px] font-bold md:text-heading1-bold">Collections</p>
       {!collections || collections.length === 0 ? (
         <p className="text-body-bold">No Collections Found</p>
       ) : (
